@@ -25,11 +25,9 @@ export function numberWithCommas(x) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 export default function CoinsTable() {
-  const [coins, setCoins] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const { currency, symbol } = CryptoState();
+  const { currency, symbol,coins,loading,fetchCoins } = CryptoState();
   const useStyles = makeStyles({
     row: {
       backgroundColor: "#16171a",
@@ -55,13 +53,7 @@ export default function CoinsTable() {
       type: "dark",
     },
   });
-  const fetchCoins = async () => {
-    setLoading(true);
-    const { data } = await axios.get(CoinList(currency));
-    console.log(data);
-    setCoins(data);
-    setLoading(false);
-  };
+ 
   useEffect(() => {
     fetchCoins();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,7 +72,7 @@ export default function CoinsTable() {
           variant="h4"
           style={{ margin: 18, fontFamily: " 'Ubuntu', sans-serif" ,paddingTop:15,paddingBottom:15,fontWeight:500}}
         >
-          Cryptocurrency Prices by Market Cap
+          Crypto-coins Market Prices
         </Typography>
         <TextField
           label="Search For a Crypto Currency.."
@@ -94,7 +86,7 @@ export default function CoinsTable() {
             <LinearProgress style={{ backgroundColor: "gold" }} />
           ) : (
             <Table aria-label="simple table">
-              <TableHead style={{ backgroundColor: "#EEBC1D" }}>
+              <TableHead style={{ backgroundColor: "gold" }}>
                 <TableRow>
                   {["Coin", "Price", "24h Change", "Market Cap"].map((head) => (
                     <TableCell
